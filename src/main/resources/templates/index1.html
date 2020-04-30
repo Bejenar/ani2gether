@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>Welcome</title>
+	
+	<script th:src="@{/js/jquery.slicknav.min.js}"></script>
+	
+	<script src = "/webjars/jquery/jquery.min.js"></script>
+	<script src = "/webjars/bootstrap/js/bootstrap.min.js"></script>
+	<script src="/webjars/sockjs-client/sockjs.min.js"></script>
+    <script src="/webjars/stomp-websocket/stomp.min.js"></script>
+	
+	<script th:src="@{/js/test/socketTest.js}"></script>
+	
+	
+
+	<script type="text/javascript">
+	
+	</script>
+	
+	<script type="text/javascript">
+        function echo() {        	
+        	
+        $.ajax({
+        headers: { 
+    	  	'Accept': 'application/json',
+    	    'Content-Type': 'application/json' 
+    	},
+        type: "GET",
+        url: "/api/echo",
+
+        success: function(response){
+        // we have the response
+		var obj = jQuery.parseJSON(JSON.stringify(response));
+        
+		document.getElementById('name').innerHTML = obj.name;
+		document.getElementById('hp').innerHTML = obj.hp;
+        },
+        error: function(e){
+        alert('Error: ' + e);
+        }
+        });
+        
+        setTimeout(echo, 1000);
+        }
+        
+        </script>
+	
+	<script type="text/javascript">
+        function doAjaxPost() {        	
+        // get the form values
+        var name = document.getElementById('name').innerHTML;
+        var hp = document.getElementById('hp').innerHTML;
+ 
+        $.ajax({
+        headers: { 
+    	  	'Accept': 'application/json',
+    	    'Content-Type': 'application/json' 
+    	},
+        type: "POST",
+        url: "/api/damage",
+        data: JSON.stringify(
+        		{
+        			"name": name, 
+        			"hp": hp
+        		}),
+        dataType:'json',
+        success: function(response){
+        // we have the response
+		var obj = jQuery.parseJSON(JSON.stringify(response));
+        
+		document.getElementById('name').innerHTML = obj.name;
+		document.getElementById('hp').innerHTML = obj.hp;
+        },
+        error: function(e){
+        alert('Error: ' + e);
+        }
+        });
+        }
+        </script>
+	
+</head>
+<body>
+
+<p>Mob name</p>
+<div th:text = "${mob.name}" id = "name"></div>
+<hr>
+<p>Health</p>
+<div th:text = "${mob.hp}" id = "hp"></div>
+<hr>
+<input type="button" value="damage mob" id = "send">
+
+</body>
+</html>
