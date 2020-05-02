@@ -1,4 +1,5 @@
 var stompClient = null;
+var user;
 
 	function setConnected(connected) {
 	    $("#connect").prop("disabled", connected);
@@ -25,8 +26,15 @@ var stompClient = null;
 	        stompClient.subscribe('/topic/mob/add', function (message) {
 	            addNoteSync(JSON.parse(message.body));
 	        });
+	        
+	        stompClient.subscribe('/topic/mob/users', function (message) {
+	            console.log("cccccccc " + message.body);
+	            appendAllUsers(JSON.parse(message.body));
+	        });
+	        
+	        sendUserRequest(user, "join");
 	    });
-	    
+		
 	}
 
 	function disconnect() {
@@ -37,11 +45,12 @@ var stompClient = null;
 	    console.log("Disconnected");
 	}
 	
-	function sendAddRequest(note, isFast, isImport) {
+	function sendAddRequest(note, isFast, isImport, user) {
 		stompClient.send(
 				"/rpg/mob/add", {},
 				JSON.stringify(
-		    			{	'note': note, 
+		    			{	'user' : user,
+		    				'note': note, 
 		    				'isFast': isFast,
 		    				'isImport' : isImport
 		    			}));
@@ -58,7 +67,7 @@ var stompClient = null;
 	
 	function addNoteSync(note){
 		
-		
+		console.log(note);
 		
 		var notes;
 		if(note.isFast)
@@ -69,6 +78,7 @@ var stompClient = null;
 		if(!note.isImport){
 			
 		var node = document.createElement("LI");
+		node.className += "user-id-" + note.user.id;
 	    var span = document.createElement("SPAN");
 	  
 	    span.className += "glyphicon glyphicon-play-circle play-icon play-icon-played";
@@ -76,10 +86,14 @@ var stompClient = null;
 	    span.setAttribute("onclick", "seekTo(" + cues[currentCue].startTime + "," + currentCue +")");
 	    //node.setAttribute("id", "note-" + i);
 	  
+	    var span1 = document.createElement("span");
+	    span1.className += "author";
+	    span1.appendChild(document.createTextNode(note.user.name));
+	    
 	    var textnode = document.createTextNode(" " + note.note); 
 	  
 	    node.appendChild(span);
-	  
+	    node.appendChild(span1);
 	    node.appendChild(textnode);                           
 	  
 	    notes.appendChild(node);
@@ -217,7 +231,7 @@ var stompClient = null;
 		if (event.keyCode == 13){
 			var note = document.getElementById("note");
 			
-			sendAddRequest(note.value, document.getElementById('fast-note').checked, false);
+			sendAddRequest(note.value, document.getElementById('fast-note').checked, false, user);
 		
 		    note.value = "";
 		}
@@ -246,7 +260,7 @@ var stompClient = null;
 		 var copyText = document.getElementById("myInput");
 
 		
-		sendAddRequest(copyText.value, document.getElementById('fast-note').checked, true);		
+		sendAddRequest(copyText.value, document.getElementById('fast-note').checked, true, user);		
 	}
 	
 	function copyToClipboard(){
@@ -265,4 +279,14 @@ var stompClient = null;
 		  document.body.removeChild(el);
 		};
 
+		
+	function sendUserRequest(user, command) {
+
+			stompClient.send(
+					"/rpg/mob/users", {},
+					JSON.stringify({
+						'user' : user,
+						'command' : command
+					}));
+		}
 	connect();

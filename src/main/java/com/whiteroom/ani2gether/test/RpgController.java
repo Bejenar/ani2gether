@@ -6,8 +6,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
-public class RpgController {
-
+public class RpgController {  
+  
 
 	
 	@MessageMapping("/mob/damage")
@@ -25,4 +25,12 @@ public class RpgController {
 		System.out.println(note);
 	    return note;
 	  }
+	
+	@MessageMapping("/mob/users")
+	  @SendTo("/topic/mob/users")  
+	  public String userMsg(String note) throws Exception {
+
+		System.out.println(note);
+	    return note;
+	  } 
 }

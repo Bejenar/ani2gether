@@ -1,0 +1,132 @@
+<html  xmlns:th="http://www.thymeleaf.org">
+<head>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link href="https://vjs.zencdn.net/7.7.5/video-js.css" rel="stylesheet" />
+
+	<!-- videojs -->
+  	<script src="//vjs.zencdn.net/5.4.6/video.min.js"></script>
+   	<script src="https://vjs.zencdn.net/7.7.5/video.js"></script>
+ 
+ 	<!-- web socket (ignore warnings)--> 
+ 	<script src = "/webjars/jquery/jquery.min.js"></script>
+	<script src = "/webjars/bootstrap/js/bootstrap.min.js"></script>
+	<script src="/webjars/sockjs-client/sockjs.min.js"></script>
+    <script src="/webjars/stomp-websocket/stomp.min.js"></script> 
+    
+ 	<script th:src="@{/js/test/ani2gether.js}"></script>
+ 	<script th:src="@{/js/test/userHandler.js}"></script>
+ 	
+<style>
+
+.author{
+	position :relative;
+	font-size: 10px;
+	color: green;
+} 
+  
+body{
+	color: #f5f5f5;
+	
+}  
+  
+ul { list-style: none; padding-inline-start: 0px;}
+
+li {
+border-bottom-style: dotted;
+border-width: 1px;	
+margin-top : 1px;
+padding : 5px;
+font-size: 1.3em;
+}
+
+button { background-color: #4CAF50;}
+textarea, input {color: #000}
+
+#note-wrapper, #fast-note-wrapper{
+display : none;
+}
+
+</style>
+  
+</head>
+
+<body style = "background: #202020;">
+<div class="container-fluid" style="margin-top:10px">
+  <div class="row" >
+  	<h1 th:text = "'いらっしゃいませ, ' + ${user.name}+ '様'"></h1>
+  	<h1 style ="display:none" th:text = "${user.name}" id ="user-name"></h1>
+  	<h1 style ="display:none" th:text = "${user.id}" id ="user-id"></h1>
+    <div class="col-md-8">
+	  <video
+    id="my-video"
+    class="video-js"
+    controls
+    preload="auto"
+    width="800"
+    height="450"
+    data-setup="{}"
+  >
+  	<source th:src="@{/video/video.mp4}" type="video/mp4">
+  	<track kind="subtitles" th:src="@{/video/ja.vtt}" srclang="ja" label="Japanese" default>
+  	<track kind="subtitles" th:src="@{/video/ru.vtt}" srclang="ru" label="Russian" default>
+	</video>
+	
+	<button id="play-button" >Пуск</button>
+	<button id="pause-button" >Пауза</button>
+	<button id="get-subs" onclick = "seks()" >Подключить панель субтитров</button>
+	<input type="checkbox" id="fast-note" checked> Режим Fast-заметки
+	<br>
+	<textarea id ="note" rows = "4" cols = "100" onkeypress = "makeNote(event)"></textarea>
+	
+	
+    </div>
+
+    <div class="col-md-4"   > 
+  	<div id = "cue-wrapper" style="overflow-x:scroll; height:500px;">
+  		<ul id = "list"></ul>
+  	</div>
+  	<div id = "note-wrapper" style="overflow-x:scroll; height:500px;">
+  		<ul id = "note-list"></ul>
+  	</div>
+  	<div id = "fast-note-wrapper" style="overflow-x:scroll; height:500px;">
+  		<ul id = "fast-note-list"></ul>
+  	</div>
+ 	<button onclick = "displayCue()">Субтитры</button>
+ 	<button onclick = "displayNote()">Заметки</button>		
+	<button onclick = "displayFastNote()">Fast-Заметки</button>		
+	
+    </div>
+    
+  </div>
+  
+  <div class = "row">
+  	<div class ="col-md-12">
+  		<button onclick = "copyToClipboard();">Copy</button>
+  		<input type="text" value="Hello World" id="myInput">
+		<button onclick="importNotes()">Import</button>
+  
+  	</div>
+  </div>
+  
+  <div class = "row">
+  	<div class ="col-md-4">
+  		<h3>User in room</h3>
+  		<div id = "user-wrapper" style="overflow-y: auto; overflow-x:scroll; height:500px; ">
+  		<ul id = "user-list"></ul>
+  	</div>
+  	</div>
+  </div>
+</div>
+
+ <script type="text/javascript"> 
+  var player = videojs('my-video');
+  joinRoom();
+  
+  </script>
+
+ 
+</body>
+
+</html>
+

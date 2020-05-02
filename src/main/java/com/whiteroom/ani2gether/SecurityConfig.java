@@ -27,8 +27,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                             "/css/**",
                             "/img/**",
                             "/webjars/**",
-                            "/").permitAll()
-
+                            "/",
+                            "/room").permitAll()
+                    .antMatchers(
+                    		"/api/users/ban/**",
+                    		"/api/users/delete/**").hasRole("admin")
+                    .and()
+        			.formLogin().permitAll()   
                 
                 .and().csrf().disable()
                 ;
@@ -40,7 +45,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
  		UserBuilder users = User.withDefaultPasswordEncoder();
  	
  		auth.inMemoryAuthentication()
- 			.withUser(users.username("admin").password("admin").roles("admin"));
+ 			.withUser(users.username("admy").password("_admy_123").roles("admin"))
+ 			.withUser(users.username("IvanTea").password("GandalfTheWhite").roles("admin"));
     }
 	
 	/*@Override
