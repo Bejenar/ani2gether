@@ -31,6 +31,8 @@ function appendAllUsers(response){
 	
 	console.log("Append all users function - " + response.user.name);
 	
+
+	
 	if (response.command == 'ban'){
 		console.log("BAN -" + response.user.ip);
 		$('.user-id-'+response.user.id).remove();
@@ -53,7 +55,16 @@ function appendAllUsers(response){
 			  response.forEach(function (item){
 				 appendUser(item.id, item.name); 
 			  });
+			  
+			  if (response.command == 'left'){
+					if (document.contains(document.getElementById("user-" + response.user.id))) {
+				        document.getElementById("user-" + response.user.id).remove();
+				     
+					}
+				}
 			});
+			
+	
 }
 
 
@@ -77,47 +88,36 @@ function appendUser(id, name){
 
 function removeUser(id, reason){
 	console.log('removing: ' + id);
-	if (document.contains(document.getElementById("user-" + id))) {
+	
+	 var settings = {
+   		  "url": "http://89.42.181.23:8080/api/users/delete/" + id,
+   		  "method": "DELETE",
+   		  "timeout": 0,
+   		};
+
+   		$.ajax(settings).done(function (response) {
+   		  console.log("removeUser() - " + response);
+   		  sendUserRequest(response, reason);
+   		});
+	
+	
+	/*if (document.contains(document.getElementById("user-" + id))) {
         document.getElementById("user-" + id).remove();
-        
-        var settings = {
-        		  "url": "http://89.42.181.23:8080/api/users/delete/" + id,
-        		  "method": "DELETE",
-        		  "timeout": 0,
-        		};
-
-        		$.ajax(settings).done(function (response) {
-        		  console.log("removeUser() - " + response);
-        		  sendUserRequest(response, reason);
-        		});
-	}
+     
+	}*/
 	
 	
 	
 }
 
-function banUser(id){
-	
-	banById(id);
-	
-}
 
-function banById(id){
-	var settings = {
-  		  "url": "http://89.42.181.23:8080/api/users/ban/" + id,
-  		  "method": "POST",
-  		  "timeout": 0,
-  		};
-
-  		$.ajax(settings).done(function (response) {
-  		  console.log(response);
-  		  removeUser(id, "ban");
-  		});
-  		
-}
 
 window.addEventListener('beforeunload', function(e){
+	
+	sendUserRequest(user, "leave");
 	removeUser(user.id, "left");
+	
+	return 'Если ты это видишь, скажи админу';
 });
 
 

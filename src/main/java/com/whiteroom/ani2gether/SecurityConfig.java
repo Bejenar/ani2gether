@@ -30,8 +30,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                             "/",
                             "/room").permitAll()
                     .antMatchers(
-                    		"/api/users/ban/**",
-                    		"/api/users/delete/**").hasRole("admin")
+                    		"/api/users/ban/**").hasRole("admin")
                     .and()
         			.formLogin().permitAll()   
                 
