@@ -1,0 +1,28 @@
+.author{
+	position :relative;
+	font-size: 10px;
+	color: green;
+} 
+  
+body{
+	color: #f5f5f5;
+	
+}  
+  
+ul { list-style: none; padding-inline-start: 0px;}
+
+li {
+border-bottom-style: dotted;
+border-width: 1px;	
+margin-top : 1px;
+padding : 5px;
+font-size: 1.3em;
+}
+
+button { background-color: #4CAF50;}
+textarea, input {color: #000}
+
+#note-wrapper, #fast-note-wrapper{
+display : none;
+}
+
