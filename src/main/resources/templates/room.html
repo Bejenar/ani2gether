@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <link href="https://vjs.zencdn.net/7.7.5/video-js.css" rel="stylesheet" />
-    <link rel="stylesheet" th:href="@{/font/stylesheet.css}'>
-    <link rel="stylesheet" href='@{/css/style.css}'>
+    <link rel="stylesheet" th:href="@{/font/stylesheet.css}">
+    <link rel="stylesheet" th:href='@{/css/style.css}'>
     <!-- videojs -->
   	<script src="//vjs.zencdn.net/5.4.6/video.min.js"></script>
     <script src="https://vjs.zencdn.net/7.7.5/video.js"></script>
@@ -84,7 +84,7 @@
                      <ul id="note-list"></ul>
                   </div>
                   <div id="fast-note-wrapper" class="tabcontent">
-                     <ul id = "fast-note-list"><li class="user-id-2"><span class="glyphicon glyphicon-play-circle play-icon play-icon-played" onclick="seekTo(46.838,4)"></span><span class="author">Baader</span> <p class="author-text">dfssdfsdf</p></li></ul>
+                     <ul id = "fast-note-list"></ul>
                   </div>
                      <div id="user-wrapper" class="tabcontent">
                         <ul th:classappend="${#request.isUserInRole('admin')?'':'span-delete'}" id = "user-list"></ul>
