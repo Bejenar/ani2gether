@@ -1,140 +1,135 @@
-<html  xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<!DOCTYPE html>
+<html lang="ru"html  xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  <link href="https://vjs.zencdn.net/7.7.5/video-js.css" rel="stylesheet" />
-
-	<!-- videojs -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link href="https://vjs.zencdn.net/7.7.5/video-js.css" rel="stylesheet" />
+    <link rel="stylesheet" href='../static/font/stylesheet.css'>
+    <link rel="stylesheet" href='../static/css/style.css'>
+    <!-- videojs -->
   	<script src="//vjs.zencdn.net/5.4.6/video.min.js"></script>
-   	<script src="https://vjs.zencdn.net/7.7.5/video.js"></script>
- 
- 	<!-- web socket (ignore warnings)--> 
+    <script src="https://vjs.zencdn.net/7.7.5/video.js"></script>
+    <!-- web socket (ignore warnings)--> 
  	<script src = "/webjars/jquery/jquery.min.js"></script>
-	<script src = "/webjars/bootstrap/js/bootstrap.min.js"></script>
-	<script src="/webjars/sockjs-client/sockjs.min.js"></script>
-    <script src="/webjars/stomp-websocket/stomp.min.js"></script> 
-    
+    <script src = "/webjars/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/webjars/sockjs-client/sockjs.min.js"></script>
+    <script src="/webjars/stomp-websocket/stomp.min.js"></script>
     <!-- my js -->
- 	<script th:src="@{/js/ani2gether.js}"></script>
- 	<script th:src="@{/js/userHandler.js}"></script>
- 	<script th:src="@{/js/adminTool.js}" sec:authorize="${hasRole('admin')}"></script>
- 	
-	<!-- my styles -->
-	 <!-- <link th:href ="@{/css/style.css}" rel="stylesheet" /> -->
-	 <link rel="stylesheet" href='../static/css/style.css'>
-  
-  <style>
-  .span-delete > li > span{
-  display : none;
-  }
-  </style>
-  
+ 	<script src="../static/js/ani2gether.js"></script>
+ 	<script src="../static/js/userHandler.js"></script>
+    <script src="../static/js/adminTool.js" sec:authorize="${hasRole('admin')}"></script>
+    
+    <title>Document</title>
 </head>
-
-<body style = "background: #202020;">
-<div class="container-fluid" style="margin-top:10px">
-  <div class="row" >
-  
-  
-  	<h1 th:text = "'いらっしゃいませ, ' + ${user.name}+ '様'"></h1>
-  	
-  	<h1 style ="display:none" th:text = "${user.name}" id ="user-name"></h1>
-  	<h1 style ="display:none" th:text = "${user.id}" id ="user-id"></h1>
-  	
-    <div class="col-md-8">
-		 <video
-	    id="my-video"
-	    class="video-js"
-	    controls
-	    preload="auto"
-	    width="800"
-	    height="450"
-	    data-setup="{}">
-	  	<source th:src="@{/video/video.mp4}" type="video/mp4">
-	  	<track kind="subtitles" th:src="@{/video/ja.vtt}" srclang="ja" label="Japanese" default>
-	  	<track kind="subtitles" th:src="@{/video/ru.vtt}" srclang="ru" label="Russian" default>
-		</video>
-		
-		<!-- <button id="play-button" >Пуск</button> --> 
-		<!--  <button id="pause-button" >Пауза</button> -->
-		
-		<button id="get-subs" onclick = "seks()" >Подключить панель субтитров</button>
-		<input type="checkbox" id="fast-note" checked> Режим Fast-заметки
-		<br>
-		<textarea id ="note" rows = "4" cols = "100" onkeypress = "makeNote(event)"></textarea>
-		
-    </div>
-
-    <div class="col-md-4">   
-	  	<div id = "cue-wrapper" style="overflow-x:scroll; height:500px;">
-	  		<ul id = "list"></ul>
-	  	</div>
-	  	
-	  	<div id = "note-wrapper" style="overflow-x:scroll; height:500px;">
-	  		<ul id = "note-list"></ul>
-	  	</div>
-	  	
-	  	<div id = "fast-note-wrapper" style="overflow-x:scroll; height:500px;">
-	  		<ul id = "fast-note-list"></ul>
-	  	</div>
-	  	
-	 	<button onclick = "displayCue()">Субтитры</button>
-	 	<button onclick = "displayNote()">Заметки</button>		
-		<button onclick = "displayFastNote()">Fast-Заметки</button>			
-    </div>   
-  </div>
-  
-  <div class = "row">
-  	<div class ="col-md-12">
-  		<button onclick = "copyToClipboard();">Copy</button>
-  		<input type="text" value="Hello World" id="myInput">
-		<button onclick="importNotes()">Import</button>
-  	</div>
-  </div>
-  
-  <div class = "row">
-  	<div class ="col-md-4">
-  		<h3>User in room</h3>
-  		<div id = "user-wrapper" style="overflow-y: auto; overflow-x:scroll; height:500px; ">
-  			<ul th:classappend="${#request.isUserInRole('admin')?'':'span-delete'}" id = "user-list"></ul>
-  		</div>
-  	</div>
-  </div>
-</div>
-
- <script type="text/javascript"> 
-  var player = videojs('my-video');
-  joinRoom();
-  
-	player.on('play', function () {
-		console.log("rabotaet!!!!!!!!!!!!!!!!!");
-		sendRequest(JSON.stringify(
-    			{	'command': 'play', 
-    				'timestamp': player.currentTime() 
-    			})); 
-    	console.log (player.currentTime()); 
-	    });
-	
-	player.on('pause', function () {
-		sendRequest(JSON.stringify(
-    			{	'command': 'pause', 
-    				'timestamp': player.currentTime() 
-    			})); 
-    	console.log (player.currentTime());
-	    });
-	
-	/*player.on('seeking', function () {
-		sendRequest(JSON.stringify(
-    			{	'command': 'pause', 
-    				'timestamp': player.currentTime() 
-    			})); 
-    	console.log (player.currentTime());
-	    });*/
-  
-  </script>
-
- 
+<body>
+   <div class="content">
+      <header>
+         <h1 th:text = "'いらっしゃいませ, ' + ${user.name}+ '様'">いらっしゃいませ</h1>
+         <h1 style ="display:none" th:text = "${user.name}" id ="user-name"></h1>
+         <h1 style ="display:none" th:text = "${user.id}" id ="user-id"></h1>
+         <button class="button help">Помощь</button>
+      </header>
+      <main>
+         <div class="content-left">
+            <div class="video-wrapper">
+               <div class="col-md-8">
+                  <video
+                     id="my-video"
+                     class="video-js"
+                     controls
+                     preload="auto"
+                     width="800"
+                     height="450"
+                     data-setup="{}">
+                     <source th:src="@{/video/video.mp4}" type="video/mp4">
+                     <track kind="subtitles" th:src="@{/video/ja.vtt}" srclang="ja" label="Japanese" default>
+                     <track kind="subtitles" th:src="@{/video/ru.vtt}" srclang="ru" label="Russian" default>
+                  </video>
+               </div>
+            </div>
+            <div class="notes-conteiner">
+               <div class="headler-wrapper">
+                  <p class="notes-header">Заметки</p>
+                  <div class="checkbox-group">
+                     <input type="checkbox" id="fast-note" checked class="custom-checkbox">
+                     <span class="custom-checkbox-span" tabindex="0"></span>
+                     <label for="custom-checkbox" class="custom-checkbox-label">
+                        <p class="fast-note">Режим Fast-заметки</p>
+                     </label>
+                 </div>
+               </div>
+               <textarea id ="note" rows = "2" cols = "100" onkeypress = "makeNote(event)"></textarea>
+               <div class="import-container">
+                  <p class="import-text">Импорт заметок</p>
+                  <div class="import-wrapper">
+                     <div class ="col-md-12">
+                        <button class="button" onclick = "copyToClipboard();">Copy</button>
+                        <input type="text" value="" id="myInput">
+                      <button class="button" onclick="importNotes()">Import</button>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="content-center">
+            <div class="sub-note-fast-container">
+               <div class="col-md-4">   
+                  <div id="cue-wrapper" class="tabcontent">
+                     <ul id="list">
+                     </ul>
+                  </div>
+                  <div id="note-wrapper" class="tabcontent">
+                     <ul id="note-list"></ul>
+                  </div>
+                  <div id="fast-note-wrapper" class="tabcontent">
+                     <ul id = "fast-note-list"><li class="user-id-2"><span class="glyphicon glyphicon-play-circle play-icon play-icon-played" onclick="seekTo(46.838,4)"></span><span class="author">Baader</span> <p class="author-text">dfssdfsdf</p></li></ul>
+                  </div>
+                     <div id="user-wrapper" class="tabcontent">
+                        <ul th:classappend="${#request.isUserInRole('admin')?'':'span-delete'}" id = "user-list"></ul>
+                     </div>
+                  <div class="button-wraper">
+                     <button class="tablinks subs" onclick = "openTabs(event, 'cue-wrapper')" id="defaultOpen">Субтитры</button>
+                     <button class="tablinks notes" onclick = "openTabs(event, 'note-wrapper')">Заметки</button>
+                     <button class="tablinks fast-notes" onclick = "openTabs(event, 'fast-note-wrapper')">Fast-Заметки</button>
+                     <button class="tablinks users" onclick = "openTabs(event, 'user-wrapper')">Зрители</button>
+                  </div>
+              </div>   
+            </div>
+         </div>
+      </main>
+   </div>
+   <script>
+      document.getElementById("defaultOpen").click();
+   </script>
+   <script type="text/javascript"> 
+      var player = videojs('my-video');
+      joinRoom();
+      
+       player.on('play', function () {
+          console.log("rabotaet!!!!!!!!!!!!!!!!!");
+          sendRequest(JSON.stringify(
+                 {	'command': 'play', 
+                    'timestamp': player.currentTime() 
+                 })); 
+           console.log (player.currentTime()); 
+           });
+       
+       player.on('pause', function () {
+          sendRequest(JSON.stringify(
+                 {	'command': 'pause', 
+                    'timestamp': player.currentTime() 
+                 })); 
+           console.log (player.currentTime());
+           });
+       
+       /*player.on('seeking', function () {
+          sendRequest(JSON.stringify(
+                 {	'command': 'pause', 
+                    'timestamp': player.currentTime() 
+                 })); 
+           console.log (player.currentTime());
+           });*/
+      </script>
 </body>
-
 </html>
-
