@@ -15,7 +15,8 @@
 body{
 	background-color: #202020;
     font-family: 'Roboto';
-    margin: 0;
+	margin: 0;
+	color: #FFFFFF;
 }
 
 p {
@@ -26,13 +27,11 @@ p {
 h1 {
 	margin: 0;
 	padding: 0;
-	color: #FFFFFF;
 }
 
 .button {
     background-color: #FF0000;
     border: none;
-    color:#FFFFFF;
     cursor: pointer;
     font-family: 'Roboto';
     outline: none;
@@ -83,7 +82,6 @@ main {
 }
 .notes-header, .fast-note, .import-text {
 	font-size: 24px;
-	color: #FFFFFF;
 }
 
 label {
@@ -132,7 +130,8 @@ label {
 	padding: 10px;
 	outline: none;
     resize: none;
-    overflow: auto;
+	overflow: auto;
+	color: #1A1A1A;
 }
 
 .import-container {
@@ -151,6 +150,7 @@ label {
 	width: 520px;
 	outline: none;
 	padding-left: 10px;
+	color: #1A1A1A;
 }
 
 .sub-note-fast-container {
@@ -168,6 +168,7 @@ label {
 
 .button-wraper {
 	width: 470px;
+	margin: 0;
 }
 
 .tablinks {
@@ -179,14 +180,13 @@ label {
     cursor: pointer;
     font-family: 'Roboto';
 	outline: none;
-	
+	border-radius: 10px 10px 0px 0px;
 }
 
 .tablinks.active {
 	background-color: #1A1A1A;
-	border-radius: 0px 0px 10px 10px;
-	border: 1.5px solid #FF0000;
-	border-top: none;
+	border: 1px solid #FF0000;
+	border-bottom: none;
 }
 
 .author{
@@ -211,9 +211,8 @@ li {
 	align-items: center;
 }
 
-.author-text {
+.author-text, .sub-text {
 	margin-left: 16px;
-	color: #FFFFFF;
 }
 
 #note-wrapper, #fast-note-wrapper{
