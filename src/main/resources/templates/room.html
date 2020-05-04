@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <link href="https://vjs.zencdn.net/7.7.5/video-js.css" rel="stylesheet" />
+
     <link rel="stylesheet" th:href="@{/font/stylesheet.css}">
     <link rel="stylesheet" th:href='@{/css/style.css}'>
     <!-- videojs -->
@@ -17,11 +18,11 @@
     <script src="/webjars/stomp-websocket/stomp.min.js"></script>
     <!-- my js -->
 
- 	<script th:src="@{/js/ani2gether.js}"></script>
- 	<script th:src="@{/js/userHandler.js}"></script>
- 	<script th:src="@{/js/adminTool.js}" sec:authorize="${hasRole('admin')}"></script>
+ 	<script src="../static/js/ani2gether.js"></script>
+ 	<script src="../static/js/userHandler.js"></script>
+ 	<script src="../static/js/adminTool.js" sec:authorize="${hasRole('admin')}"></script>
     
-    <title>Document</title>
+    <title>ani2gether</title>
 </head>
 <body>
    <div class="content">
@@ -75,7 +76,13 @@
          </div>
          <div class="content-center">
             <div class="sub-note-fast-container">
-               <div class="col-md-4">   
+               <div class="col-md-4">
+                  <div class="button-wraper">
+                     <button class="tablinks subs" onclick = "openTabs(event, 'cue-wrapper')" id="defaultOpen">Субтитры</button>
+                     <button class="tablinks notes" onclick = "openTabs(event, 'note-wrapper')">Заметки</button>
+                     <button class="tablinks fast-notes" onclick = "openTabs(event, 'fast-note-wrapper')">Fast-Заметки</button>
+                     <button class="tablinks users" onclick = "openTabs(event, 'user-wrapper')">Зрители</button>
+                  </div>  
                   <div id="cue-wrapper" class="tabcontent">
                      <ul id="list">
                      </ul>
@@ -86,14 +93,8 @@
                   <div id="fast-note-wrapper" class="tabcontent">
                      <ul id = "fast-note-list"></ul>
                   </div>
-                     <div id="user-wrapper" class="tabcontent">
-                        <ul th:classappend="${#request.isUserInRole('admin')?'':'span-delete'}" id = "user-list"></ul>
-                     </div>
-                  <div class="button-wraper">
-                     <button class="tablinks subs" onclick = "openTabs(event, 'cue-wrapper')" id="defaultOpen">Субтитры</button>
-                     <button class="tablinks notes" onclick = "openTabs(event, 'note-wrapper')">Заметки</button>
-                     <button class="tablinks fast-notes" onclick = "openTabs(event, 'fast-note-wrapper')">Fast-Заметки</button>
-                     <button class="tablinks users" onclick = "openTabs(event, 'user-wrapper')">Зрители</button>
+                  <div id="user-wrapper" class="tabcontent">
+                     <ul th:classappend="${#request.isUserInRole('admin')?'':'span-delete'}" id = "user-list"></ul>
                   </div>
               </div>   
             </div>
