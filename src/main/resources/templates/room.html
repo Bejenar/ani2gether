@@ -20,8 +20,8 @@
  	<script th:src="@{/js/adminTool.js}" sec:authorize="${hasRole('admin')}"></script>
  	
 	<!-- my styles -->
-	 <!-- <link th:href ="@{/css/style.css}" rel="stylesheet" /> -->
-	 <link rel="stylesheet" href='../static/css/style.css'>
+	 <link th:href ="@{/css/style.css}" rel="stylesheet" />
+	 <!--<link rel="stylesheet" href='../static/css/style.css'>-->
   
   <style>
   .span-delete > li > span{
@@ -58,10 +58,9 @@
 		<!-- <button id="play-button" >Пуск</button> --> 
 		<!--  <button id="pause-button" >Пауза</button> -->
 		
-		<button id="get-subs" onclick = "seks()" >Подключить панель субтитров</button>
 		<input type="checkbox" id="fast-note" checked> Режим Fast-заметки
 		<br>
-		<textarea id ="note" rows = "4" cols = "100" onkeypress = "makeNote(event)"></textarea>
+		<input type ="text" id ="note" onkeypress = "makeNote(event)"></textarea>
 		
     </div>
 
@@ -123,6 +122,27 @@
     	console.log (player.currentTime());
 	    });
 	
+	player.on('canplay', seks);
+	
+	player.on('timeupdate', function () {
+	      
+	      var currTime = this.currentTime();
+	      
+	      console.log(currentCue);
+	      
+	      if (currTime > cues[currentCue].endTime && currTime > cues[currentCue+1].startTime){
+	    	  currentCue++;
+	    	  delcss();
+	    	  sexcss("li-" + currentCue);
+	      }
+	      
+	      if (currTime < cues[currentCue].startTime && currentCue > 0){
+	    	  currentCue--;
+	    	  delcss();
+	    	  sexcss("li-" + currentCue);
+	      } 
+	    });
+		
 	/*player.on('seeking', function () {
 		sendRequest(JSON.stringify(
     			{	'command': 'pause', 

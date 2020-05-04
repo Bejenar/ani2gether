@@ -1,6 +1,8 @@
 var stompClient = null;
 var user;
 
+var currentCue = 1, tracks, track, cues; 
+
 	function setConnected(connected) {
 	    $("#connect").prop("disabled", connected);
 	    $("#disconnect").prop("disabled", !connected);
@@ -90,11 +92,13 @@ var user;
 	    span1.className += "author";
 	    span1.appendChild(document.createTextNode(note.user.name));
 	    
-	    var textnode = document.createTextNode(" " + note.note); 
+	    var pNote = document.createElement("p");
+	    pNote.className += "author-text";
+	    pNote.appendChild(document.createTextNode(" " + note.note));
 	  
 	    node.appendChild(span);
 	    node.appendChild(span1);
-	    node.appendChild(textnode);                           
+	    node.appendChild(pNote);                           
 	  
 	    notes.appendChild(node);
 		}
@@ -116,9 +120,8 @@ var user;
 			  
 			  console.log(">>>>>track<<<<<<<<<<<<<" + track.cues[0].text);
 			
-		}
-		
-		if (option == 'pause'){
+		}		
+		else if (option == 'pause'){
 			player.currentTime(message.timestamp);
 			player.pause();
 		}
@@ -126,6 +129,7 @@ var user;
 			player.currentTime(message.timestamp);
 			player.play();
 			
+			console.log("PARSING MESSAGE COMMAND - "  + message.command);
 			currentCue = parseInt(message.command);
 
 	    	delcss();
@@ -154,7 +158,6 @@ var user;
 	});
 	
 
-	var currentCue = 1, tracks, track, cues; 
 	
 	function seekTo(time, pos){
 		sendRequest(JSON.stringify(
@@ -168,6 +171,7 @@ var user;
 	
 	/*ЗДЕСЬ ДОБАВЛЯЮТСЯ ЭЛЕМЕНТЫ НА СТРАНИЦУ*/
 	function seks(){
+		currentCue = 1;
 		tracks = player.textTracks();
 		track = tracks[0];
 		cues = track.cues;
@@ -191,29 +195,7 @@ var user;
 		  
 		    subs.appendChild(node);   
 		}
-		
-		player.on('timeupdate', function () {
-		      
-		      var currTime = this.currentTime();
 
-		      console.log(currTime);
-		      
-		      if (currTime > cues[currentCue].endTime && currTime > cues[currentCue+1].startTime){
-		    	  currentCue++;
-		    	  delcss();
-		    	  sexcss("li-" + currentCue);
-		      }
-		      
-		      if (currTime < cues[currentCue].startTime && currentCue > 0){
-		    	  currentCue--;
-		    	  delcss();
-		    	  sexcss("li-" + currentCue);
-		      } 
-		    });
-		
-
-
-		
 	}
 	
 	/*ЗДЕСЬ ДОБАВЛЯЮТСЯ ЭЛЕМЕНТЫ НА СТРАНИЦУ*/
@@ -236,10 +218,13 @@ var user;
 	function makeNote(event){
 		if (event.keyCode == 13){
 			var note = document.getElementById("note");
+			var noteValue = note.value.trim();
 			
-			sendAddRequest(note.value, document.getElementById('fast-note').checked, false, user);
-		
-		    note.value = "";
+			if (noteValue != "")
+			sendAddRequest(noteValue, document.getElementById('fast-note').checked, false, user);
+			console.log(noteValue);
+			note.value = "";
+
 		}
 	}
 	
