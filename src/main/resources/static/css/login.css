@@ -31,6 +31,7 @@ body {
     margin-bottom: -74px;
     width: 300px;
     z-index: 1;
+    
 }
 
 .form {
@@ -56,7 +57,7 @@ h1 {
     width: 390px;
 }
 
-.button {
+button {
     background-color: #FF0000;
     border: none;
     color:#FFFFFF;

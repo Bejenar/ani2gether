@@ -227,27 +227,19 @@ var currentCue = 1, tracks, track, cues;
 
 		}
 	}
-	
-	/*ЗДЕСЬ МЕНЯЮТСЯ СТИЛИ*/
-	function displayCue(){
-		document.getElementById("cue-wrapper").style.display = "block";
-		document.getElementById("note-wrapper").style.display = "none";
-		document.getElementById("fast-note-wrapper").style.display = "none";
-		
-	}
-	/*ЗДЕСЬ МЕНЯЮТСЯ СТИЛИ*/
-	function displayNote(){
-		document.getElementById("cue-wrapper").style.display = "none";
-		document.getElementById("note-wrapper").style.display = "block";
-		document.getElementById("fast-note-wrapper").style.display = "none";
-		
-	}
-	/*ЗДЕСЬ МЕНЯЮТСЯ СТИЛИ*/
-	function displayFastNote(){
-		document.getElementById("cue-wrapper").style.display = "none";
-		document.getElementById("note-wrapper").style.display = "none";
-		document.getElementById("fast-note-wrapper").style.display = "block";
-		
+
+	function openTabs(ev, tab) {
+		var i, tabcontent, tablinks;
+		tabcontent = document.getElementsByClassName("tabcontent");
+		for (i = 0; i < tabcontent.length; i++) {
+			tabcontent[i].style.display = "none";
+		}
+		tablinks = document.getElementsByClassName("tablinks");
+		for (i = 0; i < tablinks.length; i++) {
+			tablinks[i].className = tablinks[i].className.replace(" active", "");
+		}
+		document.getElementById(tab).style.display = "block";
+		ev.currentTarget.className += " active";
 	}
 	
 	function importNotes(){
