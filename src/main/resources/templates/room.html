@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <link href="https://vjs.zencdn.net/7.7.5/video-js.css" rel="stylesheet" />
-    <link rel="stylesheet" href='../static/font/stylesheet.css'>
-    <link rel="stylesheet" href='../static/css/style.css'>
+    <link rel="stylesheet" th:href="@{/font/stylesheet.css}'>
+    <link rel="stylesheet" href='@{/css/style.css}'>
     <!-- videojs -->
   	<script src="//vjs.zencdn.net/5.4.6/video.min.js"></script>
     <script src="https://vjs.zencdn.net/7.7.5/video.js"></script>
@@ -16,9 +16,10 @@
     <script src="/webjars/sockjs-client/sockjs.min.js"></script>
     <script src="/webjars/stomp-websocket/stomp.min.js"></script>
     <!-- my js -->
- 	<script src="../static/js/ani2gether.js"></script>
- 	<script src="../static/js/userHandler.js"></script>
-    <script src="../static/js/adminTool.js" sec:authorize="${hasRole('admin')}"></script>
+
+ 	<script th:src="@{/js/ani2gether.js}"></script>
+ 	<script th:src="@{/js/userHandler.js}"></script>
+ 	<script th:src="@{/js/adminTool.js}" sec:authorize="${hasRole('admin')}"></script>
     
     <title>Document</title>
 </head>
@@ -122,6 +123,27 @@
                  })); 
            console.log (player.currentTime());
            });
+     
+     player.on('canplay', seks);
+	
+	player.on('timeupdate', function () {
+	      
+	      var currTime = this.currentTime();
+	      
+	      console.log(currentCue);
+	      
+	      if (currTime > cues[currentCue].endTime && currTime > cues[currentCue+1].startTime){
+	    	  currentCue++;
+	    	  delcss();
+	    	  sexcss("li-" + currentCue);
+	      }
+	      
+	      if (currTime < cues[currentCue].startTime && currentCue > 0){
+	    	  currentCue--;
+	    	  delcss();
+	    	  sexcss("li-" + currentCue);
+	      } 
+	    });
        
        /*player.on('seeking', function () {
           sendRequest(JSON.stringify(
