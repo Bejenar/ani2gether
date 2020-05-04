@@ -94,7 +94,7 @@ var currentCue = 1, tracks, track, cues;
 	    
 	    var pNote = document.createElement("p");
 	    pNote.className += "author-text";
-	    pNote.appendChild(document.createTextNode(" " + note.note));
+	    pNote.appendChild(document.createTextNode(note.note));
 	  
 	    node.appendChild(span);
 	    node.appendChild(span1);
@@ -187,11 +187,13 @@ var currentCue = 1, tracks, track, cues;
 		    span.setAttribute("onclick", "seekTo(" + cues[i].startTime + "," + i +")");
 		    node.setAttribute("id", "li-" + i);
 		  
-		    var textnode = document.createTextNode(" " + cues[i].text); 
+		    var pNote = document.createElement("p");
+		    pNote.className += "sub-text";
+		    pNote.appendChild(document.createTextNode(" " + cues[i].text));
 		  
 		    node.appendChild(span);
 		  
-		    node.appendChild(textnode);                           
+		    node.appendChild(pNote);                           
 		  
 		    subs.appendChild(node);   
 		}
