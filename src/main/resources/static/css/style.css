@@ -195,6 +195,7 @@ label {
 	color:#FF0000;
 	margin-left: 10px;
 	font-weight: bold;
+	width: 170px;
 } 
   
 ul { 
@@ -209,11 +210,12 @@ li {
 	padding : 5px;
 	font-size: 20px;
 	display: flex;
-	align-items: center;
 }
 
 .author-text, .sub-text {
 	margin-left: 16px;
+	width: 320px;
+	word-wrap:break-word;
 }
 
 #note-wrapper, #fast-note-wrapper{

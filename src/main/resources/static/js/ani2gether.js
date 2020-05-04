@@ -171,7 +171,6 @@ var currentCue = 1, tracks, track, cues;
 	
 	/*ЗДЕСЬ ДОБАВЛЯЮТСЯ ЭЛЕМЕНТЫ НА СТРАНИЦУ*/
 	function seks(){
-		currentCue = 1;
 		tracks = player.textTracks();
 		track = tracks[0];
 		cues = track.cues;
@@ -226,6 +225,9 @@ var currentCue = 1, tracks, track, cues;
 			sendAddRequest(noteValue, document.getElementById('fast-note').checked, false, user);
 			console.log(noteValue);
 			note.value = "";
+			event.preventDefault();
+            whenEnterPressed();
+			
 
 		}
 	}

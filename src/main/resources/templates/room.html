@@ -18,9 +18,9 @@
     <script src="/webjars/stomp-websocket/stomp.min.js"></script>
     <!-- my js -->
 
- 	<script src="../static/js/ani2gether.js"></script>
- 	<script src="../static/js/userHandler.js"></script>
- 	<script src="../static/js/adminTool.js" sec:authorize="${hasRole('admin')}"></script>
+ 	<script th:src="@{/js/ani2gether.js}"></script>
+ 	<script th:src="@{/js/userHandler.js}"></script>
+ 	<script th:src="@{/js/adminTool.js}" sec:authorize="${hasRole('admin')}"></script>
     
     <title>ani2gether</title>
 </head>
