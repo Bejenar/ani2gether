@@ -125,7 +125,7 @@
            console.log (player.currentTime());
            });
      
-     player.on('canplay', seks);
+     player.on('canplay', addElements);
 	
 	player.on('timeupdate', function () {
 	      
@@ -136,13 +136,13 @@
 	      if (currTime > cues[currentCue].endTime && currTime > cues[currentCue+1].startTime){
 	    	  currentCue++;
 	    	  delcss();
-	    	  sexcss("li-" + currentCue);
+	    	  addcss("li-" + currentCue);
 	      }
 	      
 	      if (currTime < cues[currentCue].startTime && currentCue > 0){
 	    	  currentCue--;
 	    	  delcss();
-	    	  sexcss("li-" + currentCue);
+	    	  addcss("li-" + currentCue);
 	      } 
 	    });
        
