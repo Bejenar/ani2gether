@@ -170,7 +170,7 @@ var currentCue = 1, tracks, track, cues;
 	}
 	
 	/*ЗДЕСЬ ДОБАВЛЯЮТСЯ ЭЛЕМЕНТЫ НА СТРАНИЦУ*/
-	function seks(){
+	function addElements(){
 		tracks = player.textTracks();
 		track = tracks[0];
 		cues = track.cues;
@@ -200,7 +200,7 @@ var currentCue = 1, tracks, track, cues;
 	}
 	
 	/*ЗДЕСЬ ДОБАВЛЯЮТСЯ ЭЛЕМЕНТЫ НА СТРАНИЦУ*/
-	function sexcss(li_id){
+	function addcss(li_id){
 		var style = document.createElement('style');
 		style.type = 'text/css';
 		style.innerHTML = '#'+ li_id + ' { background-color: #454343; }';
