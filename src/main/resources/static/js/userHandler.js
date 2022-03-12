@@ -21,18 +21,12 @@ function joinRoom(){
 				console.log(user);
 				appendAllUsers(user);
 			});
-
-	
-	
-	
 }
 
 function appendAllUsers(response){
 	
 	console.log("Append all users function - " + response.user.name);
-	
 
-	
 	if (response.command == 'ban'){
 		console.log("BAN -" + response.user.ip);
 		$('.user-id-'+response.user.id).remove();
@@ -67,8 +61,6 @@ function appendAllUsers(response){
 	
 }
 
-
-/*ЗДЕСЬ ДОБАВЛЯЮТСЯ ЭЛЕМЕНТЫ НА СТРАНИЦУ*/
 function appendUser(id, name){
 	var u = document.getElementById("user-list");
 	var li = document.createElement("LI");
@@ -99,18 +91,7 @@ function removeUser(id, reason){
    		  console.log("removeUser() - " + response);
    		  sendUserRequest(response, reason);
    		});
-	
-	
-	/*if (document.contains(document.getElementById("user-" + id))) {
-        document.getElementById("user-" + id).remove();
-     
-	}*/
-	
-	
-	
 }
-
-
 
 window.addEventListener('beforeunload', function(e){
 	
