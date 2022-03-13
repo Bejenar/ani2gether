@@ -16,21 +16,21 @@ var currentCue = 1, tracks, track, cues;
 	}
 
 	function connect() {
-	    var socket = new SockJS('/mob');
+	    var socket = new SockJS('/note');
 	    stompClient = Stomp.over(socket);
 	    stompClient.connect({}, function (frame) {
 	        setConnected(true);
-	        console.log('Connected: ' + frame);
-	        stompClient.subscribe('/topic/mob/damage', function (message) {
+	        console.log('Connected: ' + frame, "color:green");
+	        stompClient.subscribe('/topic/note/event', function (message) {
 	            showMessage(JSON.parse(message.body));
 	        });
 	        
-	        stompClient.subscribe('/topic/mob/add', function (message) {
+	        stompClient.subscribe('/topic/note/add', function (message) {
 	            addNoteSync(JSON.parse(message.body));
 	        });
 	        
-	        stompClient.subscribe('/topic/mob/users', function (message) {
-	            console.log("cccccccc " + message.body);
+	        stompClient.subscribe('/topic/note/users', function (message) {
+	            console.log("Message:" + message.body, "color:green");
 	            appendAllUsers(JSON.parse(message.body));
 	        });
 	        
@@ -44,12 +44,12 @@ var currentCue = 1, tracks, track, cues;
 	        stompClient.disconnect();
 	    }
 	    setConnected(false);
-	    console.log("Disconnected");
+	    console.log("Disconnected", "color:green");
 	}
 	
 	function sendAddRequest(note, isFast, isImport, user) {
 		stompClient.send(
-				"/rpg/mob/add", {},
+				"/player/note/add", {},
 				JSON.stringify(
 		    			{	'user' : user,
 		    				'note': note, 
@@ -62,14 +62,14 @@ var currentCue = 1, tracks, track, cues;
 
 		
 	    stompClient.send(
-	    		"/rpg/mob/damage", {}, 
+	    		"/player/note/event", {},
 	    		message);
 
 	}
-	/*ЗДЕСЬ ДОБАВЛЯЮТСЯ ЭЛЕМЕНТЫ НА СТРАНИЦУ*/
+
 	function addNoteSync(note){
 		
-		console.log(note);
+		console.log(note, "color:green");
 		
 		var notes;
 		if(note.isFast)
@@ -86,7 +86,6 @@ var currentCue = 1, tracks, track, cues;
 	    span.className += "glyphicon glyphicon-play-circle play-icon play-icon-played";
 	  
 	    span.setAttribute("onclick", "seekTo(" + cues[currentCue].startTime + "," + currentCue +")");
-	    //node.setAttribute("id", "note-" + i);
 	  
 	    var span1 = document.createElement("span");
 	    span1.className += "author";
@@ -108,7 +107,7 @@ var currentCue = 1, tracks, track, cues;
 	}
 
 	function showMessage(message) {
-		console.log(">>>>>>>>>>>I am sending message: " + message);
+		console.log(">>>>>>>>>>>I am sending message: " + message, "color:green");
 		var option = message.command;
 		
 		if (option == 'play'){
@@ -118,7 +117,7 @@ var currentCue = 1, tracks, track, cues;
 			var tracks = player.textTracks();
 			var track = tracks[0];
 			  
-			  console.log(">>>>>track<<<<<<<<<<<<<" + track.cues[0].text);
+			  console.log(">>>>>track<<<<<<<<<<<<<" + track.cues[0].text, "color:green");
 			
 		}		
 		else if (option == 'pause'){
@@ -129,7 +128,7 @@ var currentCue = 1, tracks, track, cues;
 			player.currentTime(message.timestamp);
 			player.play();
 			
-			console.log("PARSING MESSAGE COMMAND - "  + message.command);
+			console.log("PARSING MESSAGE COMMAND - "  + message.command, "color:green");
 			currentCue = parseInt(message.command);
 
 	    	delcss();
@@ -144,7 +143,7 @@ var currentCue = 1, tracks, track, cues;
 	    			{	'command': 'play', 
 	    				'timestamp': player.currentTime() 
 	    			})); 
-	    	console.log (player.currentTime()); 
+	    	console.log (player.currentTime(), "color:green");
 	    	});
 	});
 	$(function () {
@@ -153,7 +152,7 @@ var currentCue = 1, tracks, track, cues;
 	    			{	'command': 'pause', 
 	    				'timestamp': player.currentTime() 
 	    			})); 
-	    	console.log (player.currentTime());  
+	    	console.log (player.currentTime(), "color:green");
 	    	});
 	});
 	
@@ -164,19 +163,17 @@ var currentCue = 1, tracks, track, cues;
     			{	'command': pos, 
     				'timestamp': time 
     			})); 
-    	console.log (player.currentTime()); 
-    	
-    	
+    	console.log (player.currentTime(), "color:green");
+
 	}
-	
-	/*ЗДЕСЬ ДОБАВЛЯЮТСЯ ЭЛЕМЕНТЫ НА СТРАНИЦУ*/
+
 	function addElements(){
 		tracks = player.textTracks();
 		track = tracks[0];
 		cues = track.cues;
 
 		for(var i = 0; i < cues.length; i++){
-			console.log(cues[i].text);
+			console.log(cues[i].text, "color:green");
 			var subs = document.getElementById("list")
 			var node = document.createElement("LI");
 		    var span = document.createElement("SPAN");
@@ -198,8 +195,7 @@ var currentCue = 1, tracks, track, cues;
 		}
 
 	}
-	
-	/*ЗДЕСЬ ДОБАВЛЯЮТСЯ ЭЛЕМЕНТЫ НА СТРАНИЦУ*/
+
 	function addcss(li_id){
 		var style = document.createElement('style');
 		style.type = 'text/css';
@@ -208,8 +204,7 @@ var currentCue = 1, tracks, track, cues;
 		document.getElementsByTagName('head')[0].appendChild(style);
 		
 	}
-	
-	/*ЗДЕСЬ ДОБАВЛЯЮТСЯ УДАЛЯЮТСЯ ЭЛЕМЕНТЫ*/
+
 	function delcss(){
 		if (document.contains(document.getElementById("highlight-style"))) {
             document.getElementById("highlight-style").remove();
@@ -223,7 +218,7 @@ var currentCue = 1, tracks, track, cues;
 			
 			if (noteValue != "")
 			sendAddRequest(noteValue, document.getElementById('fast-note').checked, false, user);
-			console.log(noteValue);
+			console.log(noteValue, "color:green");
 			note.value = "";
 			event.preventDefault();
             whenEnterPressed();
@@ -268,12 +263,11 @@ var currentCue = 1, tracks, track, cues;
 		  document.execCommand('copy');
 		  document.body.removeChild(el);
 		};
-
 		
 	function sendUserRequest(user, command) {
 
 			stompClient.send(
-					"/rpg/mob/users", {},
+					"/player/note/users", {},
 					JSON.stringify({
 						'user' : user,
 						'command' : command
